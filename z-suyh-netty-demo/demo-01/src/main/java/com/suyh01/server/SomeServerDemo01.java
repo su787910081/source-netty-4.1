@@ -8,7 +8,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SomeServer {
+public class SomeServerDemo01 {
     public static void main(String[] args) {
         // 用于处理客户端连接请求，将请求发送给ChildGroup中的eventLoop
         EventLoopGroup parentGroup = new NioEventLoopGroup();
