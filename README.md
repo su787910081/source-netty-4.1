@@ -64,3 +64,6 @@ are listed below:
 
 Automatic modules do not provide any means to declare dependencies, so you need to list each used module separately
 in your `module-info` file.
+
+> 1. 在pom.xml 中添加 skip = true
+> 2. 先编译Netty/Common 模块
