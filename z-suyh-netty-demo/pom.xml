@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>demo-01</module>
+        <module>demo-02</module>
     </modules>
 
     <properties>
