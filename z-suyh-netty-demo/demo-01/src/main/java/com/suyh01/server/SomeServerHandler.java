@@ -44,6 +44,10 @@ public class SomeServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
 
+            if ("/exception".equals(request.uri())) {
+                throw new RuntimeException("throw a exception.");
+            }
+
             // 构造response的响应体
             ByteBuf body = Unpooled.copiedBuffer("hello netty world", CharsetUtil.UTF_8);
             // 生成响应对象
@@ -63,5 +67,19 @@ public class SomeServerHandler extends ChannelInboundHandlerAdapter {
             // 当写成功之后，添加channel关闭监听器
             future.addListener(ChannelFutureListener.CLOSE);
         }
+    }
+
+    /**
+     * 当Channel 中的数据在处理过程中出现异常时会触发该方法执行
+     *
+     * @param ctx   上下文
+     * @param cause 异常对象
+     * @throws Exception 可以继续往外抛异常
+     */
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("数据处理时发生了异常。exceptionCaught.", cause);
+        // 关闭Channel
+        ctx.close();
     }
 }
