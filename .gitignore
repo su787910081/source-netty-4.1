@@ -19,7 +19,7 @@
 
 # Build targets
 /target
-*/target
+**/target/
 
 # Report directories
 /reports

@@ -65,5 +65,5 @@ are listed below:
 Automatic modules do not provide any means to declare dependencies, so you need to list each used module separately
 in your `module-info` file.
 
-> 1. 在pom.xml 中添加 skip = true
-> 2. 先编译Netty/Common 模块
+> `mvn clean install -DskipTests=true -Dcheckstyle.skip=true -Dforbiddenapis.skip=true  -Dcheckstyle.skip=true -Dcheckstyle.skip=true -Dmaven.test.skip=true  -s C:\Java\apache-maven-3.5.0\conf\settings.xml`
+> 先编译Netty/Common 模块
