@@ -2,6 +2,7 @@ package com.abc.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -51,9 +52,9 @@ public class SomeServerHandler extends ChannelInboundHandlerAdapter {
             // ctx.flush();
             // ctx.writeAndFlush(response);
             // ctx.channel().close();
-            ctx.writeAndFlush(response)
-                    // 添加channel关闭监听器
-                    .addListener(ChannelFutureListener.CLOSE);
+            ChannelFuture channelFuture = ctx.writeAndFlush(response);
+            // 添加channel关闭监听器
+            channelFuture.addListener(ChannelFutureListener.CLOSE);
         }
     }
 
@@ -67,6 +68,9 @@ public class SomeServerHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         // 关闭Channel
+        // suyh - 老师讲的，这里调用了之后就会触发，SomeServer 中的future.channel().closeFuture()
+        // suyh - 从而导致整个服务器的关闭。那就是说这个ctx 是服务器ServerSocket 对象了？
+        // suyh - 但是我怎么感觉这个ctx 是一个连接的ctx 而不是Server 的ctx呢.
         ctx.close();
     }
 }

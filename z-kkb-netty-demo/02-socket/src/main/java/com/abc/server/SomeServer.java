@@ -28,8 +28,10 @@ public class SomeServer {
                             // 获取channel中的Pipeline
                             ChannelPipeline pipeline = ch.pipeline();
                             // StringDecoder：字符串解码器，将Channel中的ByteBuf数据解码为String
+                            // suyh - 解码器是在数据接收的时候会用到
                             pipeline.addLast(new StringDecoder());
                             // StringEncoder：字符串编码器，将String编码为将要发送到Channel中的ByteBuf
+                            // suyh - 编码器是在数据发送的时候会用到
                             pipeline.addLast(new StringEncoder());
                             pipeline.addLast(new SomeServerHandler());
                         }
