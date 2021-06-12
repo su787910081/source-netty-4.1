@@ -451,6 +451,7 @@
     <module>microbench</module>
     <module>bom</module>
     <module>z-suyh-netty-demo</module>
+    <module>z-kkb-netty-demo</module>
   </modules>
 
   <dependencyManagement>
