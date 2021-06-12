@@ -9,7 +9,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.FixedLengthFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 
 // 定义服务端启动类
 public class SomeServer {
@@ -25,6 +24,7 @@ public class SomeServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
+                            // 固定长度帧解码器，即会按照指定的长度对Frame中的数据进行拆粘包。
                             pipeline.addLast(new FixedLengthFrameDecoder(22));
                             pipeline.addLast(new StringDecoder());
                             pipeline.addLast(new SomeServerHandler());

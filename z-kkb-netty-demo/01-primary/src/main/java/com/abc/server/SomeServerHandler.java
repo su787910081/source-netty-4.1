@@ -68,9 +68,8 @@ public class SomeServerHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         // 关闭Channel
-        // suyh - 老师讲的，这里调用了之后就会触发，SomeServer 中的future.channel().closeFuture()
-        // suyh - 从而导致整个服务器的关闭。那就是说这个ctx 是服务器ServerSocket 对象了？
-        // suyh - 但是我怎么感觉这个ctx 是一个连接的ctx 而不是Server 的ctx呢.
+        // suyh - 这里的异常是服务端与客户端之间的一个连接的异常，这个异常只能管这个连接。
+        // suyh - 所以这里的关闭也只是关闭这一个连接而以，并不会将这个服务器的监听socket 也给关闭掉。
         ctx.close();
     }
 }

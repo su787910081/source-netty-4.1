@@ -11,7 +11,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 
 // 定义服务端启动类
 public class SomeServer {
@@ -29,6 +28,8 @@ public class SomeServer {
                             ChannelPipeline pipeline = ch.pipeline();
 
                             ByteBuf delimiter = Unpooled.copiedBuffer("###---###".getBytes());
+                            // 基于分隔符的帧解码器，即会按照指定分隔符对数据进行拆包粘包，解码出ByteBuf。
+                            // 第一个参数是一帧的最大字符长度。
                             pipeline.addLast(new DelimiterBasedFrameDecoder(Integer.MAX_VALUE, delimiter));
                             pipeline.addLast(new StringDecoder());
                             pipeline.addLast(new SomeServerHandler());
