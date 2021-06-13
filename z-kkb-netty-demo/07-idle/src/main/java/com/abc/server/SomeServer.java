@@ -33,6 +33,8 @@ public class SomeServer {
                             // pipeline.addLast(new IdleStateHandler(3, 5, 0));
                             // 若在5秒内同时即发生了读又发生了写操作才不会触发all操作空闲事件
                             // 若在5秒内读与写操作有任何一项没有发生，都会触发all操作空闲事件
+                            // suyh - 若在5秒内既有读也有写发生，才不会触发all操作空闲事件
+                            // suyh - 若只有一个发生，也会触发该事件的发生。
                             pipeline.addLast(new IdleStateHandler(0, 0, 5));
                             pipeline.addLast(new StringDecoder());
                             pipeline.addLast(new StringEncoder());

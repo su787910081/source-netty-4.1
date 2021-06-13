@@ -8,6 +8,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
+/**
+ * 这些都是使用JDK 里面的接口和方法来实现的非阻塞TCP
+ */
 public class NioServer2 {
     public static void main(String[] args) throws Exception {
         // 创建一个服务端Channel

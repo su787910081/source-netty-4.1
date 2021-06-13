@@ -40,3 +40,82 @@
 >             int lengthFieldOffset, int lengthFieldLength,
 >             int lengthAdjustment, int initialBytesToStrip);
 > ```
+
+`SelectorProvider`
+
+> ```java
+> /**
+>  * 线程安全的
+>  * 提供Channel 和selector
+>  */
+> public abstract class SelectorProvider;
+> ```
+
+`Selector`
+
+> ```java
+> /**
+>  * 将一个Channel 注册到一个Selector 中的时候，是以SelectorKey 对象的方式注册的。
+>  * 三个集合
+>  * key set: 所有注册的key
+>  * selected-key set: 已经就绪的key
+>  * cancelled-key set: 调用SelectorKey.cancel() 或者Channel.close() 方法的时候会被添加到这个集合中。
+>  *                    将要被删除的key，这些key 将会在下一个调用select 方法的时候从key set 中删除。
+>  */
+> public abstract class Selector implements Closeable;
+> ```
+
+`SelectionKey`
+
+> ```java
+> /**
+>  * 每一个Channel 被注册之后都会有一个SelectionKey 被返回。
+>  */
+> public abstract class SelectionKey ;
+> public static final int OP_READ = 1 << 0;
+> public static final int OP_WRITE = 1 << 2;
+> public static final int OP_CONNECT = 1 << 3;
+> public static final int OP_ACCEPT = 1 << 4;
+> ```
+
+## I/O模型
+
+<img src="md-png\IO模型.png"  />
+
+- I/O调用线程
+
+  > 用户调用的线程
+
+- I/O执行线程
+
+  > 大概可以理解为调用内核
+
+- 同步/异步调用
+
+  > 指的是I/O调用线程与I/O执行线程之间的同步与异步调用。
+
+- 阻塞
+
+  > 指的是`I/O调用线程`要等待`I/O执行线程`返回结果之后再执行后续操作。
+
+- 非阻塞
+
+  > 指的是`I/O调用线程`不需要等待`I/O执行线程`返回结果之后再执行后续操作。
+
+- 异步阻塞IO模型(在实际生活中是没有实际意义的)
+
+![](md-png\IO模型-同步非阻塞.png)
+
+![](md-png\IO模型-同步非阻塞2.png)
+
+![](md-png\Reactor模型的IO.png)
+
+
+
+![](md-png\Proactor模型的IO.png)
+
+![](md-png\NettyEpoll.png)
+
+
+
+![](md-png\NettyProactor.png)

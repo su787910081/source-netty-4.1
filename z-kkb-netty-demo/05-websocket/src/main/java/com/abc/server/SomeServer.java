@@ -32,6 +32,8 @@ public class SomeServer {
                             // 添加大块数据Chunk处理器
                             pipeline.addLast(new ChunkedWriteHandler());
                             // 添加Chunk聚合处理器
+                            // HttpMessage 可以理解为http 请求头
+                            // HttpContent 可以理解为http 请求body
                             pipeline.addLast(new HttpObjectAggregator(4096));
                             // 添加WebSocket协议转换处理器
                             pipeline.addLast(new WebSocketServerProtocolHandler("/some"));

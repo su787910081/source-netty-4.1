@@ -7,9 +7,6 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
 public class SomeServerHandler extends ChannelInboundHandlerAdapter {
 
     // 创建一个ChannelGroup，其是一个线程安全的集合，其中存放着与当前服务器相连接的所有Active状态的Channel
@@ -22,6 +19,8 @@ public class SomeServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 获取到向服务器发送消息的channel
         Channel channel = ctx.channel();
+        // suyh - 如果包含发给自己的，则可以直接使用下面的代码即可。
+        // group.writeAndFlush(msg + "\n");
         // 这里要实现将消息广播给所有group中的客户端Channel
         // 发送给自己的消息与发送给大家的消息是不一样的
         group.forEach(ch -> {

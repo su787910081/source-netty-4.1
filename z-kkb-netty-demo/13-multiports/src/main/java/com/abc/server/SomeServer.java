@@ -20,6 +20,12 @@ public class SomeServer {
     private EventLoopGroup parentGroup = new NioEventLoopGroup();
     private EventLoopGroup childGroup = new NioEventLoopGroup();
 
+    /*
+     * suyh - 个人感觉这样的监听多个端口是没有多少意义的，只能说在技术上面支持了这种方式。
+     * suyh - 这种监听多个端口的话，这些所有的监听可做的服务是一样的。启用多个端口只是浪费资源而以
+     * suyh - 实际工作中监听多个端口的话，肯定每个端口实现的功能是不一样的。那这样的话，childHandler() 中的参数肯定不一样。
+     * suyh - 所以我们应该是需要创建多个ServerBootstrap 对象实例。
+     */
     public void start(List<Integer> ports) throws Exception {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(parentGroup, childGroup)

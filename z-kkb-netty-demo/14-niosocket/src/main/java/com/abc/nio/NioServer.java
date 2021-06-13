@@ -8,6 +8,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Set;
 
+/**
+ * 这些都是使用JDK 里面的接口和方法来实现的非阻塞TCP
+ */
 public class NioServer {
     public static void main(String[] args) throws Exception {
         // 创建一个服务端Channel
@@ -38,13 +41,16 @@ public class NioServer {
                 if (key.isAcceptable()) {
                     System.out.println("接收到Client的连接");
                     // 获取连接到Server的客户端channel，其是客户端channel在server端的代表（驻京办）
+                    // suyh - 与客户端之间的通信Channel
                     SocketChannel clientChannel = serverChannel.accept();
+                    System.out.println("remote host: " + clientChannel.getRemoteAddress());
                     clientChannel.configureBlocking(false);
                     // 将客户端channel注册到selector，并告诉selector让其监听这个channel中是否发生了读事件
                     clientChannel.register(selector, SelectionKey.OP_READ);
                 }
                 // 若当前key为OP_READ，则说明当前channel中有客户端发送来的数据。
                 // 那么，这里的代码就是用于读取channel中的数据的
+                // suyh - 在客户端关闭连接时，也是可读状态被触发。
                 if (key.isReadable()) {
                     try {
                         // 创建buffer
@@ -60,8 +66,13 @@ public class NioServer {
                 }
 
                 // 删除当前处理过的key，以免重复处理
-                selectionKeys.remove(key);
+                // suyh - 这一步很重要，不能遗漏。
+                // selectionKeys.remove(key);
             } // end-for
+            System.out.println("keys size: " + selectionKeys.size());
+            // suyh - 这一步很重要，不能遗漏。
+            // suyh - 把循环中删除的步骤拿到外面处理
+            selectionKeys.clear();
         }
 
     }
