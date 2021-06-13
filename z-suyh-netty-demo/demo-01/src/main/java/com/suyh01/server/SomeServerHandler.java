@@ -12,6 +12,8 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +32,9 @@ public class SomeServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        Attribute<Object> number = ctx.channel().attr(AttributeKey.valueOf("number"));
+        System.out.println("number ------ " + number);
+
         log.info("------ {}", ctx.channel());
 
         log.info("msg class: {}", msg.getClass());

@@ -4,6 +4,8 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
 
 /**
  * 管道初始化
@@ -26,5 +28,8 @@ public class SomeChannelInitializer extends ChannelInitializer<SocketChannel> {
          */
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new SomeServerHandler());
+
+        Attribute<Object> number = ch.attr(AttributeKey.valueOf("number"));
+        System.out.println("number === " + number);
     }
 }
