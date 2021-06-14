@@ -30,6 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class MultithreadEventExecutorGroup extends AbstractEventExecutorGroup {
 
+    // suyh - 它就是所谓的group，其中的元素就是EventExecutor
+    // suyh - 实际就是NioEventLoop 的数组结构。
     private final EventExecutor[] children;
     private final Set<EventExecutor> readonlyChildren;
     private final AtomicInteger terminatedChildren = new AtomicInteger();
@@ -65,6 +67,8 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
      * @param executor          the Executor to use, or {@code null} if the default should be used.
      * @param chooserFactory    the {@link EventExecutorChooserFactory} to use.
      * @param args              arguments which will passed to each {@link #newChild(Executor, Object...)} call
+     *                          suyh - 这里的args 参数最终是给NioEventLoop 类使用。
+     *                          suyh - 调用的位置在: NioEventLoopGroup.newChild()
      */
     protected MultithreadEventExecutorGroup(int nThreads, Executor executor,
                                             EventExecutorChooserFactory chooserFactory, Object... args) {
@@ -73,6 +77,8 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         }
 
         if (executor == null) {
+            // suyh - 创建这个executor (ThreadPerTaskExecutor)
+            // suyh - executor 总执行器
             executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());
         }
 
@@ -81,6 +87,8 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         for (int i = 0; i < nThreads; i ++) {
             boolean success = false;
             try {
+                // suyh - 创建每一个NioEventLoop 对象
+                // suyh - NioEventLoopGroup.newChild
                 children[i] = newChild(executor, args);
                 success = true;
             } catch (Exception e) {

@@ -54,6 +54,7 @@ public final class ThreadExecutorMap {
         return new Executor() {
             @Override
             public void execute(final Runnable command) {
+                // suyh - ThreadPerTaskExecutor.execute
                 executor.execute(apply(command, eventExecutor));
             }
         };

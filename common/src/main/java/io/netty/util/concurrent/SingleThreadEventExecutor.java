@@ -167,7 +167,11 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
         super(parent);
         this.addTaskWakesUp = addTaskWakesUp;
         this.maxPendingTasks = DEFAULT_MAX_PENDING_EXECUTOR_TASKS;
+        // suyh - this.executor 当前执行器中的实际执行器，我们称它为子executor
+        // suyh - executor(参数) group 中的执行器，我们称它为总executor
         this.executor = ThreadExecutorMap.apply(executor, this);
+        // suyh - 任务队列(是不是可以理解为线程池的任务队列)
+        // suyh - PlatformDependent.newMpscQueue()
         this.taskQueue = ObjectUtil.checkNotNull(taskQueue, "taskQueue");
         this.rejectedExecutionHandler = ObjectUtil.checkNotNull(rejectedHandler, "rejectedHandler");
     }
@@ -827,6 +831,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
         boolean inEventLoop = inEventLoop();
         addTask(task);
         if (!inEventLoop) {
+            // suyh - 首次调用任务执行时，thread 并未创建，这里创建线程并执行。
             startThread();
             if (isShutdown()) {
                 boolean reject = false;
@@ -894,6 +899,9 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
             Thread thread = this.thread;
             if (thread == null) {
                 assert !inEventLoop();
+                // suyh - TODO: 这里是什.executor() 方法，
+                // suyh - 在方法中最终么情况，为什么执行了这一行代码之后thread 就非null了？
+                //                // suyh - 原来这里最终也是调用了thia还是调用startThread() 对thread 属性进行初始化的。
                 submit(NOOP_TASK).syncUninterruptibly();
                 thread = this.thread;
                 assert thread != null;
@@ -975,9 +983,17 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
 
     private void doStartThread() {
         assert thread == null;
+        // suyh - 这里的executor 是ThreadPerTaskExecutor
+        // suyh - 在这里调用之后，就是交给ThreadPerTaskExecutor 去调度，分配一个线程执行
+        // suyh - 看了一下ThreadPerTaskExecutor.execute 的主要工作就是创建一个工作线程。
+        // suyh - 而ThreadPertaskExecutor 中是使用DefaultThreadFactory 来创建的线程
+        // suyh - DefaultThreadFactory 创建的线程对象实例是FastThreadLocalThread (extends Thread)
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                // suyh - 意思是在这里初始化thread 的？ 是的，没有错。
+                // suyh - 也就是由ThreadPerTaskExecutor 决定当前的thread 是怎么来的
+                // suyh - 那么ThreadPerTaskExecutor 里面是有线程或者线程池的。
                 thread = Thread.currentThread();
                 if (interrupted) {
                     thread.interrupt();

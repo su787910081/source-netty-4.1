@@ -151,6 +151,9 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
                     pipeline.addLast(handler);
                 }
 
+                // suyh - ch 就是ServerChannel
+                // suyh - eventLoop() parentGroup中分配的其中一个EventLoop。
+                // suyh - 然后将该任务添加到EventLoop 中执行
                 ch.eventLoop().execute(new Runnable() {
                     @Override
                     public void run() {

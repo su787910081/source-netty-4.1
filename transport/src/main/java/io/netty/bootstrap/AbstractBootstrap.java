@@ -328,6 +328,9 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
 
         // suyh - ServerChannel 注册到对应的Selector 中
         // suyh - AbstractNioChannel.doRegister
+        // suyh - 将ServerChannel 注册到parentEventLoopGroup 中
+        // suyh - 通过choose 选择一个实际的单NioEventLoop，将channel 注册进去。
+        // suyh - 这里看起来是将channel 注册到NioEventLoop, 但实际上是选择一个NioEventLoop 分配给该channel。
         ChannelFuture regFuture = config().group().register(channel);
         if (regFuture.cause() != null) {
             if (channel.isRegistered()) {
@@ -355,6 +358,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
             final ChannelFuture regFuture, final Channel channel,
             final SocketAddress localAddress, final ChannelPromise promise) {
 
+        // suyh - 向主NioEventLoop 中添加绑定任务，然后直接返回。由NioEventLoop 自行去调用执行实际的绑定工作。
         // This method is invoked before channelRegistered() is triggered.  Give user handlers a chance to set up
         // the pipeline in its channelRegistered() implementation.
         channel.eventLoop().execute(new Runnable() {

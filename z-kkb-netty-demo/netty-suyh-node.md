@@ -119,3 +119,31 @@
 
 
 ![](md-png\NettyProactor.png)
+
+
+
+
+
+
+
+## 源码
+
+- `NioEventLoopGroup`
+
+  > - `extends MultithreadEventLoopGroup`
+  >
+  >   - `extends MultithreadEventExecutorGroup`
+  >
+  >     > ```java
+  >     > // NioEventLoop implements EventExecutor
+  >     > // 这里的元素就是NioEventLoop
+  >     > private final EventExecutor[] children;
+  >     > ```
+  >     >
+  >     > 
+  >
+  > - 
+
+- `NioEventLoop`
+
+- `MultithreadEventExecutorGroup`

@@ -53,6 +53,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
     private volatile SocketAddress localAddress;
     private volatile SocketAddress remoteAddress;
+    // suyh - 当前Channel 被安排在了哪个EventLoop(NioEventLoop)
     private volatile EventLoop eventLoop;
     private volatile boolean registered;
     private boolean closeInitiated;

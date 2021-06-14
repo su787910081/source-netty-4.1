@@ -990,6 +990,8 @@ public final class PlatformDependent {
      * @return A MPSC queue which may be unbounded.
      */
     public static <T> Queue<T> newMpscQueue() {
+        // suyh - 创建一个新队列，它可以安全地用于多个生产者（不同的线程）和单个使用者（一个线程！）。
+        // suyh - Mpsc: multiple producers single consumer
         return Mpsc.newMpscQueue();
     }
 
