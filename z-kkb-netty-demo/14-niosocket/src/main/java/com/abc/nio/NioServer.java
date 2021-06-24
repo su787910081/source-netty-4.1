@@ -67,12 +67,13 @@ public class NioServer {
 
                 // 删除当前处理过的key，以免重复处理
                 // suyh - 这一步很重要，不能遗漏。
-                // selectionKeys.remove(key);
+                // suyh - 在Selector 的注释上面写了，要么使用Set#remove(..) 方法，要么使用iterator#remove() 方法，禁止使用其它方法。
+                selectionKeys.remove(key);
             } // end-for
             System.out.println("keys size: " + selectionKeys.size());
             // suyh - 这一步很重要，不能遗漏。
             // suyh - 把循环中删除的步骤拿到外面处理
-            selectionKeys.clear();
+            // selectionKeys.clear();   // suyh - Selector 注释上面注明了，禁止使用其它方法删除。
         }
 
     }

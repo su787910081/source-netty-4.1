@@ -122,11 +122,98 @@
 
 
 
+## JDK源码
+
+### SelectorProvider
+
+- `java.nio.channels.spi.SelectorProvider`
+
+  > 它是一个单例类，专门提供`selectors`和`selectable channels`。
+  >
+  > 它是JDK 中提供的。
+  >
+  > 该类中所有的方法都是线程安全的。
+  >
+  > 通过静态方法`provider()` 获取单例对象。
+  >
+  > 通过对应类的静态方法`DatagramChannel#open`、`Pipe#open`、`Selector#open`、`ServerSocketChannel#open`、`SocketChannel#open`得到对应类的实例(可选的对象)
+
+  > 所谓的可选的对象，就是指的I/O多路复用器。
+
+### Selector
+
+- `java.nio.channels.Selector`
+
+  > 它是一个多路复用器
+  >
+  > 通过调用相关的`open` 静态方法进行创建
+  >
+  > 所有注册到`Selector`中的实例都是以`SelectionKey`进行映射的。
+  >
+  > 它维护了三个set 集合。另外，`SelectionKey` 中也自行维护了两个集合。
+  >
+  > - `key-set`
+  >
+  >   > 当前注册到该`Selector` 中的所有`SelectionKey`
+  >   >
+  >   > 通过方法`keys()` 可以获取到该集合。
+  >
+  > - `selected-key`
+  >
+  >   > 当前就绪的key的集合
+  >   >
+  >   > 通过方法`selectedKeys()` 方法获取，但是我们一般不使用该方法来获取，而是使用：`select(timeout)`、`select()`、`selectNow()`。
+  >   >
+  >   > 如果对这些就绪的对象已经做了相关的操作，**需要自行删除该对象**，从该集合中删除。
+  >   >
+  >   > 否则，在下一次循环时还会触发该对象的就绪操作，从而导致无限循环。
+  >
+  > - `cancelled-key`
+  >
+  >   > 取消`key`的集合
+  >   >
+  >   > 需要这个集合的主要作用就是，当某个key 我们要将它从当前`Selector`中注销时，先将其添加到该集合中，然后在当前`Selector`的下一次循环时(调用`select`相关操作时)将会做实际的删除操作。
+  >   >
+  >   > 我们可以通过调用`SelectionKey` 的`cancel()`方法或者其他的相关方法达到此效果。
+
+### SelectionKey
+
+- `java.nio.channels.SelectionKey`
+
+  > 表示向选择器注册可选择通道的令牌(TOKEN)。
+  >
+  > 两个操作集合，使用`Integer`类型来存储
+  >
+  > - 感兴趣的集合，关注的集合
+  >
+  >   > 注册的时候需要给定
+  >
+  > - 当前激活就绪的集合
+  >
+  >   > `Selector`的`select(..)`操作，标记的集合。
+  >
+  > -----
+  >
+  > 整数类型二进制位所对应的操作
+  >
+  > ```java
+  > public static final int OP_READ = 1 << 0;
+  > public static final int OP_WRITE = 1 << 2;
+  > public static final int OP_CONNECT = 1 << 3;
+  > public static final int OP_ACCEPT = 1 << 4;
+  > ```
+
+## Netty源码
+
+### NioServerSocketChannel
+
+- `NioServerSocketChannel`
+
+  > ![](md-png\NioServerSocketChannel-ext.png)
+
+---
 
 
-
-
-## 源码
 
 - `NioEventLoopGroup`
 

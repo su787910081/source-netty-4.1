@@ -83,6 +83,7 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
     }
 
     /**
+     * suyh - channel: 这个参数实际要的是一个(SelectableChannel) 选择器，并非普通的channel。
      * Create a new instance using the given {@link ServerSocketChannel}.
      */
     public NioServerSocketChannel(ServerSocketChannel channel) {
